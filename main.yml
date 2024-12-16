@@ -1,0 +1,6 @@
+---
+- name: Main Playbook
+  hosts: localhost
+  gather_facts: false
+
+- import_playbook: setup-ssh.yml
