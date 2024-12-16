@@ -1,0 +1,19 @@
+---
+- name: Setup lilydevtools repository
+  hosts: localhost  # Defines the target as the local machine
+  gather_facts: false  # Disable facts gathering for faster execution since it's not needed
+
+  tasks:
+    - name: Ensure ~/projects directory exists
+      ansible.builtin.file:
+        path: ~/projects
+        state: directory
+        mode: '0755'
+
+    - name: Clone lilydevtools repository
+      ansible.builtin.git:
+        repo: git@github.com:lily-gh/lilydevtools.git
+        dest: ~/projects/lilydevtools
+        version: main
+        key_file: ~/.ssh/id_lily
+        update: yes
