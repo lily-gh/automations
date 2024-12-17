@@ -3,8 +3,8 @@
   hosts: localhost
   vars:
     ssh_keys:
-      - { src: keys/id_lily, dest: ~/.ssh/id_lily, mode: '0600' }
-      - { src: keys/id_lily.pub, dest: ~/.ssh/id_lily.pub, mode: '0644' }
+      - { src: ../keys/id_lily, dest: ~/.ssh/id_lily, mode: '0600' }
+      - { src: ../keys/id_lily.pub, dest: ~/.ssh/id_lily.pub, mode: '0644' }
 
   tasks:
     - name: Decrypt and copy SSH keys
