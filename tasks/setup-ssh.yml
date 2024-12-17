@@ -36,3 +36,8 @@
             AddKeysToAgent yes
         create: yes
 
+    - name: Add GitHub's SSH key to known_hosts
+      ansible.builtin.shell: |
+        ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      args:
+        creates: ~/.ssh/known_hosts
