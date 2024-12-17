@@ -1,0 +1,29 @@
+---
+# Ensure Homebrew is installed
+- name: Check if Homebrew is installed
+  ansible.builtin.command: which brew
+  register: homebrew_check
+  ignore_errors: true
+
+- name: Install Homebrew if not installed
+  ansible.builtin.shell: |
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: homebrew_check.rc != 0
+  args:
+    creates: /usr/local/bin/brew
+
+# Update Homebrew
+- name: Update Homebrew
+  ansible.builtin.command: brew update
+  when: homebrew_check.rc == 0
+
+# Install packages with Homebrew
+- name: Install packages on macOS
+  ansible.builtin.homebrew:
+    name: "{{ item }}"
+  with_items:
+    - zsh
+    - bat
+    - yt-dlp
+    - ffmpeg
+    - git

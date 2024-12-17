@@ -1,7 +1,18 @@
 ---
 - name: Main Playbook
   hosts: localhost
-  gather_facts: false
+  gather_facts: true  # Ensure platform facts are gathered
+  become: true        # Required for sudo on Ubuntu
 
-- import_playbook: setup-ssh.yml
-- import_playbook: clone-lilydevtools.yml
+  tasks:
+    - name: Include macOS tasks
+      include_tasks: tasks/macos-packages.yml
+      when: ansible_facts['os_family'] == 'Darwin'
+
+    - name: Include Ubuntu tasks
+      include_tasks: tasks/ubuntu-packages.yml
+      when: ansible_facts['os_family'] == 'Debian'
+
+- import_playbook: tasks/oh-my-zsh.yml
+- import_playbook: tasks/setup-ssh.yml
+- import_playbook: tasks/clone-lilydevtools.yml

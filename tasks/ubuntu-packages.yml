@@ -1,0 +1,18 @@
+---
+# Update apt cache
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+# Install packages with apt
+- name: Install packages on Ubuntu/WSL
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - zsh
+    - bat
+    - ffmpeg
+    - fzf
+    - git
+
