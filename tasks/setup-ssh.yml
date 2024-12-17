@@ -7,6 +7,12 @@
       - { src: ../keys/id_lily.pub, dest: ~/.ssh/id_lily.pub, mode: '0644' }
 
   tasks:
+    - name: Ensure ~/projects directory exists
+      ansible.builtin.file:
+        path: ~/.ssh
+        state: directory
+        mode: '0700'
+
     - name: Decrypt and copy SSH keys
       ansible.builtin.template:
         src: "{{ item.src }}"
