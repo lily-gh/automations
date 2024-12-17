@@ -13,6 +13,8 @@
       include_tasks: tasks/ubuntu-packages.yml
       when: ansible_facts['os_family'] == 'Debian'
 
-- import_playbook: tasks/oh-my-zsh.yml
+    - name: Install Oh My Zsh
+      include_tasks: tasks/oh-my-zsh.yml
+
 - import_playbook: tasks/setup-ssh.yml
 - import_playbook: tasks/clone-lilydevtools.yml
