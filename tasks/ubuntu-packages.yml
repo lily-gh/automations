@@ -10,8 +10,6 @@
 - name: Download and install the GPG key for eza (force overwrite)
   ansible.builtin.shell: |
     yes | wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor > /etc/apt/keyrings/gierens.gpg
-  args:
-    warn: false  # Suppress non-critical warnings like overwriting files
 
 - name: Add eza repository to sources list
   ansible.builtin.copy:
