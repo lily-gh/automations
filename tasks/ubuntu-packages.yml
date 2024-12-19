@@ -10,6 +10,8 @@
   ansible.builtin.command:
     cmd: wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
   become: true
+  args:
+    creates: /etc/apt/keyrings/gierens.gpg
 
 - name: Add eza repository
   ansible.builtin.command:
