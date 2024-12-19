@@ -1,31 +1,4 @@
 ---
-# Setup eza dependencies
-- name: Create keyrings directory
-  ansible.builtin.file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
-
-- name: Download and add GPG key for eza
-  ansible.builtin.command:
-    cmd: wget -qO- https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
-  become: true
-  args:
-    creates: /etc/apt/keyrings/gierens.gpg
-
-- name: Add eza repository
-  ansible.builtin.command:
-    cmd: echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | tee /etc/apt/sources.list.d/gierens.list
-  become: true
-
-- name: Set permissions for keyring and sources list
-  ansible.builtin.file:
-    path: "{{ item }}"
-    mode: '0644'
-  with_items:
-    - /etc/apt/keyrings/gierens.gpg
-    - /etc/apt/sources.list.d/gierens.list
-  become: true
 
 # Update apt cache
 - name: Update apt cache
@@ -46,4 +19,33 @@
     - zsh-syntax-highlighting
     - zsh-autosuggestions
     - gpg
-    - eza
+
+# Install eza
+- name: Install eza dependencies
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - curl
+    - build-essential
+    - libssl-dev
+    - pkg-config
+
+- name: Download eza
+  ansible.builtin.command:
+    cmd: curl -fsSL https://github.com/eza-community/eza/releases/download/v0.10.1/eza-v0.10.1-x86_64-unknown-linux-gnu.tar.gz -o /tmp/eza.tar.gz
+
+- name: Extract eza
+  ansible.builtin.unarchive:
+    src: /tmp/eza.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+
+- name: Verify eza installation
+  ansible.builtin.command:
+    cmd: /usr/local/bin/eza --version
+  register: eza_version
+
+- name: Print eza version
+  ansible.builtin.debug:
+    msg: "eza version: {{ eza_version.stdout }}"
